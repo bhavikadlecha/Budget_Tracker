@@ -6,7 +6,6 @@ from expense import add_expense, total_expenses, plot_expenses
 from income import add_income,  total_income, plot_income
 import matplotlib.pyplot as plt
 import csv
-# main.py
 
 income = 'budgettracker/income.csv'
 expense = 'budgettracker/expenses.csv'
@@ -53,7 +52,7 @@ def filter_income(year, month):
             for row in reader:
                 if row and row[0]:
                     try:
-                        date_obj = datetime.strptime(row[0], "%m/%d/%y")  # If it's mm/dd/yy
+                        date_obj = datetime.strptime(row[0], "%m/%d/%y")  
                         if date_obj.year == int(year) and date_obj.month == int(month):
                             filtered_income.append(row)
                     except ValueError:
@@ -76,8 +75,7 @@ def filter_expenses(year, month):
             for row in reader:
                 if row and row[0]:
                     try:
-                        # Try to parse the actual format used in the CSV
-                        date_obj = datetime.strptime(row[0], "%m/%d/%y")  # If it's mm/dd/yy
+                        date_obj = datetime.strptime(row[0], "%m/%d/%y") 
                         if date_obj.year == int(year) and date_obj.month == int(month):
                             filtered_expenses.append(row)
                     except ValueError:
@@ -92,25 +90,25 @@ def filter_expenses(year, month):
         return []
     
 def plot_income_vs_expense():
-
     income = total_income()
     expense = total_expenses()
-
     labels = ['Income', 'Expense']
     values = [income, expense]
     colors = ['green', 'red']
-
     plt.figure(figsize=(6, 4))
     plt.bar(labels, values, color=colors)
     plt.title('Income vs Expense')
     plt.ylabel('Amount')
     plt.show()
+
+
 root = tk.Tk()
 icon = tk.PhotoImage(file="budget.png")
 root.iconphoto(False, icon)
 root.title("Budget Tracker")
 root.geometry("900x900")
 
+#Income section
 tk.Label(root, text="Add Income", font=('Arial', 12, 'bold')).grid(row=0, column=0, columnspan=2, pady=(10, 0))
 
 i_date=DateEntry(root,datepat="yyyy-mm-dd")
@@ -118,15 +116,12 @@ i_date.set_date(datetime.now())
 i_category = tk.Entry(root)
 i_description = tk.Entry(root)
 i_amount = tk.Entry(root)
-# Month Dropdown,Year Dropdown
 income_filter_month = ttk.Combobox(root, values=[f"{i:02}" for i in range(1, 13)], width=5)
 income_filter_month.set(datetime.now().strftime('%m'))
 
 
 income_filter_year = ttk.Combobox(root, values=[str(y) for y in range(2000, datetime.now().year + 1)], width=7)
 income_filter_year.set(datetime.now().strftime('%Y'))
-
-
 
 tk.Label(root, text="Date:").grid(row=1, column=0)
 tk.Label(root, text="Source:").grid(row=2, column=0)
@@ -155,7 +150,6 @@ e_category = tk.Entry(root)
 e_description = tk.Entry(root)
 e_amount = tk.Entry(root)
 
-# Month Dropdown,Year Dropdown
 expense_filter_month = ttk.Combobox(root, values=[f"{i:02}" for i in range(1, 13)], width=5)
 expense_filter_month.set(datetime.now().strftime('%m'))
 expense_filter_year = ttk.Combobox(root, values=[str(y) for y in range(2000, datetime.now().year + 1)], width=7)
