@@ -1,14 +1,10 @@
 import csv
-import tkinter as tk
 from tkinter import messagebox
-from datetime import datetime
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from tkcalendar import DateEntry
 import os
 
 income = os.path.join("budgettracker", "income.csv")
-
 
 def add_income(date, category, description, amount):
     if not date or not category or not description:
@@ -17,13 +13,13 @@ def add_income(date, category, description, amount):
     if float(amount) <= 0:
         raise ValueError("Amount must be a positive number.")
 
-    file_exists = os.path.isfile(income)
+    
     with open(income, 'a', newline='') as f:
         writer = csv.writer(f)
-        if not file_exists:
+        if not income:
             writer.writerow(['Date', 'Category', 'Description', 'Amount'])
         writer.writerow([date, category, description, amount])
-    messagebox.showinfo("Success", "Income record added successfully.")
+    
 def total_income():
     try:
         with open(income, 'r') as f:
@@ -32,7 +28,6 @@ def total_income():
             return sum(float(row[3]) for row in reader if row)
     except FileNotFoundError:
        raise FileNotFoundError("No Income recorded yet.")
-
 
 def plot_income():
     try:
