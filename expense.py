@@ -1,14 +1,10 @@
 import csv
-import tkinter as tk
 from tkinter import messagebox
-from datetime import datetime
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from tkcalendar import DateEntry
 import os
 
 expense = os.path.join("budgettracker", "expenses.csv")
-
 
 def add_expense(date, category, description, amount):
     if not date or not category or not description:
@@ -25,8 +21,6 @@ def add_expense(date, category, description, amount):
         writer.writerow([date, category, description, amount])
     messagebox.showinfo("Success", "Expense added successfully.")
 
-
-
 def total_expenses():
     try:
         with open(expense, 'r') as f:
@@ -35,11 +29,6 @@ def total_expenses():
             return sum(float(row[3]) for row in reader if row)
     except FileNotFoundError:
        raise FileNotFoundError("No expenses recorded yet.")
-
-        
-
-
-
 
 def plot_expenses():
     try:
