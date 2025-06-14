@@ -36,9 +36,15 @@ def plot_expenses():
             reader = csv.reader(f)
             next(reader)  # Skip header 
             expenses = defaultdict(float)
+            row_found = False
             for row in reader:
                 if row:
-                     expenses[row[1]] += float(row[3])
+                    row_found = True
+                    expense[row[1]] += float(row[3])
+
+            if not row_found:
+                messagebox.showinfo("Info", "No expense data available. Please add records first.")
+                return
 
         categories = list(expenses.keys())
         amounts = list(expenses.values())
