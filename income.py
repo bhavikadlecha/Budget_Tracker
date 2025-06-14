@@ -9,17 +9,17 @@ income = os.path.join("budgettracker", "income.csv")
 def add_income(date, category, description, amount):
     if not date or not category or not description:
         raise ValueError("All fields must be filled out.")
-    
     if float(amount) <= 0:
         raise ValueError("Amount must be a positive number.")
-
-    
+    file_exists = os.path.isfile(income)
     with open(income, 'a', newline='') as f:
         writer = csv.writer(f)
-        if not income:
+        if not file_exists or os.stat(income).st_size == 0:
             writer.writerow(['Date', 'Category', 'Description', 'Amount'])
         writer.writerow([date, category, description, amount])
-    
+    messagebox.showinfo("Success", "Income added successfully.")
+
+
 def total_income():
     try:
         with open(income, 'r') as f:
@@ -35,9 +35,15 @@ def plot_income():
             reader = csv.reader(f)
             next(reader)  # Skip header 
             incomes = defaultdict(float)
+            row_found = False
             for row in reader:
                 if row:
-                     incomes[row[1]] += float(row[3])
+                    row_found = True
+                    incomes[row[1]] += float(row[3])
+
+            if not row_found:
+                messagebox.showinfo("Info", "No income data available. Please add records first.")
+                return
 
         categories = list(incomes.keys())
         amounts = list(incomes.values())
@@ -50,3 +56,4 @@ def plot_income():
 
     except FileNotFoundError:
         messagebox.showerror("Error", "No Income recorded yet.")  
+    
