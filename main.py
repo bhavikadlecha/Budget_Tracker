@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import csv
 
-income = 'budgettracker/income.csv'
-expense = 'budgettracker/expenses.csv'
+incomefile = 'budgettracker/income.csv'
+expensefile = 'budgettracker/expenses.csv'
 # Root Window ===>
 root = tk.Tk()
 root.title("Budget Tracker")
@@ -60,10 +60,10 @@ def filter_records(file_path, year, month, record_type):
         return []
 
 def filter_income(year, month):
-    return filter_records(income, year, month, "income")
+    return filter_records(incomefile, year, month, "income")
 
 def filter_expenses(year, month):
-    return filter_records(expense, year, month, "expenses")
+    return filter_records(expensefile, year, month, "expenses")
    
 def update_table_with_filter(year, month):
     for row in tree.get_children():
@@ -117,9 +117,9 @@ def open_filter_window():
 
 def plot_income_vs_expense():
     income = total_income()
-    expense = total_expenses()
+    expenses_by_category = total_expenses()
     labels = ['Income', 'Expense']
-    values = [income, expense]
+    values = [income, expenses_by_category]
     colors = ['green', 'red']
     plt.figure(figsize=(6, 4))
     plt.bar(labels, values, color=colors)
@@ -132,12 +132,12 @@ def update_table():
     for row in tree.get_children():
         tree.delete(row)
     try:
-        income_df = pd.read_csv(income)
+        income_df = pd.read_csv(incomefile)
         income_df['Type'] = 'income'
     except:
         income_df = pd.DataFrame(columns=["Date", "Category", "Description", "Amount", "Type"])
     try:
-        expense_df = pd.read_csv(expense)
+        expense_df = pd.read_csv(expensefile)
         expense_df['Type'] = 'expense'
     except:
         expense_df = pd.DataFrame(columns=["Date", "Category", "Description", "Amount", "Type"])
@@ -251,7 +251,7 @@ tk.Button(main_frame, text="Add Expense", command=lambda: add_expense_ui(e_date.
 tk.Button(main_frame, text="Total Expenses", command=lambda: messagebox.showinfo("Total Expenses", f"Total Expenses: {total_expenses()}"),bg="#4AA6C5",fg="black",activebackground="#28C5AB").grid(row=25, column=0, columnspan=2, pady=(10, 0))
 tk.Button(main_frame, text="Clear Fields", command=clear_expense_fields,bg="#4AA6C5",fg="black",activebackground="#28C5AB").grid(row=26, column=0,columnspan=2, pady=(10, 0))
 tk.Button(main_frame, text="Show All Entries", command=update_table,bg="#4AA6C5",fg="black",activebackground="#28C5AB").grid(row=28, column=0, columnspan=2, pady=(10, 0))
-tk.Button(main_frame, text="Filter Entries", command=open_filter_window,bg="#4AA6C5",fg="black",activebackground="#28C5AB").grid(row=32, column=0, columnspan=2, pady=(10, 0))
+tk.Button(main_frame, text="Filter Entries", command=open_filter_window,bg="#4AA6C5",fg="black",activebackground="#28C5AB").grid(row=29, column=0, columnspan=2, pady=(10, 0))
 top_button_frame = tk.Frame(table_frame)
 top_button_frame.pack(anchor="e", padx=10, pady=(10, 0)) 
 pie_icon_small = tk.PhotoImage(file="pie.png")
@@ -267,6 +267,7 @@ plot_button = tk.Button(
     bg="#4AA6C5",fg="black",activebackground="#28C5AB"
 )
 plot_button.pack(pady=5)
+
 bar_icon = tk.PhotoImage(file="bar.png")
 bar_button = tk.Button(
     top_button_frame,
@@ -281,5 +282,5 @@ bar_button = tk.Button(
     bg="#4AA6C5",fg="black",activebackground="#28C5AB"
 )
 bar_button.pack(pady=(0, 10))
-
+#tk.Button(root,text="Pie chart expense", command=plot_expenses, bg="#4AA6C5", fg="black", activebackground="#28C5AB").pack(side="bottom", pady=10         )
 root.mainloop()
